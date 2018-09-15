@@ -1,24 +1,10 @@
 const fs = require('fs')
 const path = require('path')
-const rimraf = require('rimraf')
 const mp3Files = require('./mp3Files')
 const mediaTags = require('./mediaTags')
 
 const mmMusicInput = 'E:/mm-music-input/'
 const mmMusicOutput = 'E:/mm-music-output/'
-
-const clearFolder = folder => {
-  return new Promise((resolve, reject) => {
-    rimraf(folder, err => {
-      if (err) {
-        reject(err)
-        return
-      }
-      fs.mkdirSync(folder)
-      resolve()
-    })
-  })
-}
 
 const getTagsPromises = files => {
   if (!files || !files.length) {
@@ -57,12 +43,14 @@ const createAlbumFoldersSync = (simpleData, mmMusicOutput) => {
 const copyFiles = (simpleData, destination) => {
   console.log('>> copying music files')
   simpleData.forEach(({ filename, folder }) => {
-    fs.createReadStream(filename).pipe(fs.createWriteStream(path.join(destination, folder, path.basename(filename))))
+    const newFilename = path.join(destination, folder, path.basename(filename))
+    if (!fs.existsSync(newFilename)) {
+      fs.createReadStream(filename).pipe(fs.createWriteStream(newFilename))
+    }
   })
 }
 
 Promise.resolve()
-  .then(() => clearFolder(mmMusicOutput))
   .then(() => mp3Files(mmMusicInput))
   .then(getTagsPromises)
   .then(simplifyMusicFileData)
