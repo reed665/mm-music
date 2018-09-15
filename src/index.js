@@ -59,6 +59,7 @@ const copyFiles = (simpleData, destination) => {
   simpleData.forEach(({ filename, folder }) => {
     const newFilename = path.join(destination, folder, path.basename(filename))
     if (!fs.existsSync(newFilename)) {
+      console.log('>> copying file:', newFilename)
       fs.createReadStream(filename).pipe(fs.createWriteStream(newFilename))
     }
   })
