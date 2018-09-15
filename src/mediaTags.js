@@ -11,7 +11,9 @@ function mediaTags (filename) {
             tags: { artist, year, album }
           })
         },
-        onError: err => reject(err)
+        onError: err => {
+          reject(err)
+        }
       })
   })
 }

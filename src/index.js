@@ -1,5 +1,6 @@
 const fs = require('fs')
 const path = require('path')
+const sanitize = require('sanitize-filename')
 const mp3Files = require('./mp3Files')
 const mediaTags = require('./mediaTags')
 
@@ -12,7 +13,11 @@ const getTagsPromises = files => {
   }
   console.log('>> music files found:', files.length)
   console.log('>> getting tags promises')
-  return Promise.all(files.map(mediaTags))
+  return Promise.all(files.map((file, idx) => {
+    const promise = mediaTags(file)
+    // console.log('>> getting tag promise', '#'+idx, file)
+    return promise
+  }))
 }
 
 const simplifyMusicFileData = musicFilesData => {
@@ -20,7 +25,7 @@ const simplifyMusicFileData = musicFilesData => {
   return musicFilesData.map(({ filename, tags }) => {
     const { artist, year, album } = tags
     const albumFolder = [artist, year, album].join(' - ')
-    return { filename, folder: albumFolder }
+    return { filename, folder: sanitize(albumFolder) }
   })
 }
 
@@ -37,7 +42,16 @@ const getAlbumFolders = simpleData => {
 
 const createAlbumFoldersSync = (simpleData, mmMusicOutput) => {
   const albumFolders = getAlbumFolders(simpleData)
-  albumFolders.forEach(folder => fs.mkdirSync(mmMusicOutput + folder))
+  albumFolders.forEach(folder => {
+    const destFolderFull = path.join(mmMusicOutput, folder).trim()
+    if (!fs.existsSync(destFolderFull)) {
+      try {
+        fs.mkdirSync(destFolderFull)
+      } catch (err) {
+        console.error(err)
+      }
+    }
+  })
 }
 
 const copyFiles = (simpleData, destination) => {
