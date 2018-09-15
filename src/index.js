@@ -20,15 +20,17 @@ const clearFolder = folder => {
   })
 }
 
-const tagsPromises = files => {
+const getTagsPromises = files => {
   if (!files || !files.length) {
-    console.log('mp3 files not found')
-    return
+    throw new Error('mp3 files not found')
   }
+  console.log('>> music files found:', files.length)
+  console.log('>> getting tags promises')
   return Promise.all(files.map(mediaTags))
 }
 
 const simplifyMusicFileData = musicFilesData => {
+  console.log('>> mapping music files metadata')
   return musicFilesData.map(({ filename, tags }) => {
     const { artist, year, album } = tags
     const albumFolder = [artist, year, album].join(' - ')
@@ -37,6 +39,7 @@ const simplifyMusicFileData = musicFilesData => {
 }
 
 const getAlbumFolders = simpleData => {
+  console.log('>> creating album folders')
   const albumFolders = []
   for (const item of simpleData) {
     const { folder } = item
@@ -52,6 +55,7 @@ const createAlbumFoldersSync = (simpleData, mmMusicOutput) => {
 }
 
 const copyFiles = (simpleData, destination) => {
+  console.log('>> copying music files')
   simpleData.forEach(({ filename, folder }) => {
     fs.createReadStream(filename).pipe(fs.createWriteStream(path.join(destination, folder, path.basename(filename))))
   })
@@ -60,7 +64,7 @@ const copyFiles = (simpleData, destination) => {
 Promise.resolve()
   .then(() => clearFolder(mmMusicOutput))
   .then(() => mp3Files(mmMusicInput))
-  .then(tagsPromises)
+  .then(getTagsPromises)
   .then(simplifyMusicFileData)
   .then(simpleData => {
     createAlbumFoldersSync(simpleData, mmMusicOutput)
