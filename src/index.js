@@ -25,7 +25,7 @@ const simplifyMusicFileData = musicFilesData => {
   return musicFilesData.map(({ filename, tags }) => {
     const { artist, year, album } = tags
     const albumFolder = [artist, year, album].join(' - ')
-    return { filename, folder: sanitize(albumFolder) }
+    return { filename, folder: sanitize(albumFolder).trim() }
   })
 }
 
@@ -43,7 +43,7 @@ const getAlbumFolders = simpleData => {
 const createAlbumFoldersSync = (simpleData, mmMusicOutput) => {
   const albumFolders = getAlbumFolders(simpleData)
   albumFolders.forEach(folder => {
-    const destFolderFull = path.join(mmMusicOutput, folder).trim()
+    const destFolderFull = path.join(mmMusicOutput, folder)
     if (!fs.existsSync(destFolderFull)) {
       try {
         fs.mkdirSync(destFolderFull)
