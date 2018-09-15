@@ -1,8 +1,9 @@
 {
   "name": "mm-music",
   "version": "1.0.0",
-  "description": "",
+  "description": "Simple cli utility to help you sorting out your music",
   "main": "src/index.js",
+  "bin": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"

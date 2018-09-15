@@ -1,11 +1,10 @@
+#!/usr/bin/env node
+
 const fs = require('fs')
 const path = require('path')
 const sanitize = require('sanitize-filename')
 const mp3Files = require('./mp3Files')
 const mediaTags = require('./mediaTags')
-
-const mmMusicInput = 'E:/mm-music-input/'
-const mmMusicOutput = 'E:/mm-music-output/'
 
 const getTagsPromises = files => {
   if (!files || !files.length) {
@@ -63,6 +62,13 @@ const copyFiles = (simpleData, destination) => {
       fs.createReadStream(filename).pipe(fs.createWriteStream(newFilename))
     }
   })
+}
+
+const [,,mmMusicInput, mmMusicOutput] = process.argv
+if (!mmMusicInput || !mmMusicOutput) {
+  console.error('mm-music: arguments missing')
+  console.info('usage example: npm start <src_folder> <dest_folder>')
+  return
 }
 
 Promise.resolve()
