@@ -12,6 +12,7 @@ function mediaTags (filename) {
           })
         },
         onError: err => {
+          console.error(`Error reading "${filename}" media tags`)
           reject(err)
         }
       })
