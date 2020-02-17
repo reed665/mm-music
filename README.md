@@ -1,6 +1,6 @@
 # mm-music
 
-Simple cli utility to help you sorting out your music
+Simple CLI utility to help you to sort out your music
 
 ## Usage example
 
