@@ -12,5 +12,5 @@ npm install --global mm-music
 mm-music <src_folder> <dest_folder>
 
 # for example
-# npm start E:/mm-music-input/ E:/mm-music-output/
+mm-music "E:\downloads\Streetlight Manifesto" E:\music
 ```

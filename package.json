@@ -1,6 +1,6 @@
 {
   "name": "mm-music",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Simple cli utility to help you sorting out your music",
   "homepage": "https://github.com/reed665/mm-music",
   "main": "src/index.js",
