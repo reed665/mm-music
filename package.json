@@ -13,7 +13,7 @@
   "author": "reed665",
   "license": "MIT",
   "dependencies": {
-    "glob": "^7.1.3",
+    "glob": "^13.0.6",
     "jsmediatags": "^3.8.1",
     "sanitize-filename": "^1.6.1"
   }
